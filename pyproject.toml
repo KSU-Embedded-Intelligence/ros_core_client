@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ros_core_client"
+version = "0.1.0"
+description = "ROS core client for environment and communicator"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Yongshuai Wu", email = "ywu26@students.kennesaw.edu" }
+]
+license = { file = "LICENSE" }
+dependencies = [
+    "grpcio>=1.50.0",
+    "Pillow>=11.0.0",
+    "numpy>=2.2.0",
+    "protobuf>=5.0.0"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+[project.urls]
+Homepage = "https://jianlab1.ayayadomain.com/gitlab/ayaya/ros_core_client.git"
+Repository = "https://jianlab1.ayayadomain.com/gitlab/ayaya/ros_core_client.git"
+Documentation = "https://jianlab1.ayayadomain.com/gitlab/ayaya/ros_core_client.git#readme"
