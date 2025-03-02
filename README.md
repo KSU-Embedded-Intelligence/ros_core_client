@@ -1,93 +1,92 @@
-# ros_core_client
-
-
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://jianlab1.ayayadomain.com/gitlab/ayaya/ros_core_client.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://jianlab1.ayayadomain.com/gitlab/ayaya/ros_core_client/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+# ROS Driver Manager
 
 ## Name
-Choose a self-explaining name for your project.
+**ROS Driver Manager**  
+A unified Python package for managing and communicating with ROS node drivers via gRPC.
 
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+ROS Driver Manager provides a streamlined API to interact with various ROS node drivers in a robotics environment. It allows you to initialize nodes, reset them, and collect observations using a consistent interface over gRPC.  
+Key features include:  
+- Grouping of command parameters by node driver.
+- Seamless integration with ROS through gRPC-based communication.
+- Support for operations such as node initialization, reset, and observation exchange.
+
+For more background on ROS, visit the [ROS website](https://www.ros.org/).
 
 ## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+[//]: # (## Visuals)
+
+[//]: # (*Insert screenshots or GIFs here to showcase the system in action. For example:*  )
+
+[//]: # (![Demo Screenshot]&#40;https://via.placeholder.com/800x400?text=ROS+Driver+Manager+Demo&#41;)
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+To install ROS Driver Manager, run following command:
+```bash
+pip install git+https://jlab-git.ayayadomain.com/gitlab/ayaya/ros_core_client.git
+```
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+```python
+from ros_core_client import Ros1Environment
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+# Initialize the ROS environment with the gRPC server IP and port.
+env = Ros1Environment("192.168.122.125", 50051)
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+# Initialize nodes (arguments should follow the expected naming convention).
+init_result = env.init_nodes(
+    ["camera_node", "lidar_node", "map_node"],
+    {}
+)
+print("Initialization Result:", init_result)
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+# Collect observations from nodes.
+observations = env.collect_observations(
+    ["odom_pose", "lidar_angles"],
+    {}
+)
+print("Observations:", observations)
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+# Close the environment when done.
+env.close()
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## Modules
+### `Ros1Environment`
+main class interface for the ros_core_client
 
-## License
-For open source projects, say how it is licensed.
+**API Functions**
+* `init_nodes(args_list, kwargs_dict)`, Initializes the specified ROS nodes
+* `reset(args_list, kwargs_dict)`, Resets the specified ROS nodes
+* `collect_observations(args_list, kwargs_dict)`, Collects observations from the specified ROS nodes
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+**Parameters:**
+- **args_list (list):**  
+  A list of strings representing the identifiers for the operations. Each string should follow the format `[node_name]_...`, for example `["camera_node", "lidar_node", "map_node"]`
+- **kwargs_dict (dict):**  
+  A dictionary of additional key-value pairs formatted as `[node_name]_...` to be sent, for example `{"goal_goal": [1, 0, 0, 0, 0, 0, 1]}`
+
+**Returns:**  
+A dictionary containing the results of the requested observations of operation information
+
+### `CommandRequestMessage`
+grpc request message class
+```protobuf
+message CommandRequestMessage {
+    google.protobuf.Timestamp time = 1;
+    string node_name = 2;
+    string command = 3;
+    bytes request = 4;
+}
+```
+
+## Version Update Information
+
+**v0.1.0**
+
+- Initial release with core functionality including node initialization, reset, and observation collection.
+- Grouping of parameters by node driver with gRPC communication.
+- Basic error handling and logging.
