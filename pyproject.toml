@@ -25,6 +25,6 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://jianlab1.ayayadomain.com/gitlab/ayaya/ros_core_client.git"
-Repository = "https://jianlab1.ayayadomain.com/gitlab/ayaya/ros_core_client.git"
-Documentation = "https://jianlab1.ayayadomain.com/gitlab/ayaya/ros_core_client.git#readme"
+Homepage = "https://jlab-git.ayayadomain.com/gitlab/ayaya/ros_core_client.git"
+Repository = "https://jlab-git.ayayadomain.com/gitlab/ayaya/ros_core_client.git"
+Documentation = "https://jlab-git.ayayadomain.com/gitlab/ayaya/ros_core_client.git#readme"
