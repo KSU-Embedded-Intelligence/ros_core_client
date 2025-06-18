@@ -15,7 +15,7 @@ license = { file = "LICENSE" }
 dependencies = [
     "grpcio>=1.50.0",
     "Pillow>=11.0.0",
-    "numpy>=2.2.0",
+    "numpy",
     "protobuf>=5.0.0"
 ]
 classifiers = [
