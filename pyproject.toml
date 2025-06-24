@@ -13,10 +13,9 @@ authors = [
 ]
 license = { file = "LICENSE" }
 dependencies = [
-    "grpcio>=1.50.0",
-    "Pillow>=11.0.0",
+    "grpcio",
     "numpy",
-    "protobuf>=5.0.0"
+    "protobuf"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
