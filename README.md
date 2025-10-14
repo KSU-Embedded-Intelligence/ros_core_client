@@ -25,7 +25,7 @@ For more background on ROS, visit the [ROS website](https://www.ros.org/).
 ## Installation
 To install ROS Driver Manager, run following command:
 ```bash
-pip install git+https://jlab-git.ayayadomain.com/gitlab/ayaya/ros_core_client.git
+pip install git+https://github.com/KSU-Embedded-Intelligence/ros_core_client.git
 ```
 
 ## Usage
