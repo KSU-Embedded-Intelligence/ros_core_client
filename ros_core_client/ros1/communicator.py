@@ -3,7 +3,6 @@ import pickle
 import sys
 
 import grpc
-from PIL import Image
 
 from .communication_objects.relay_service_pb2 import CommandRequestMessage
 from .communication_objects.relay_service_pb2_grpc import RpcCommunicatorStub
@@ -76,6 +75,7 @@ class RpcCommunicatorClient:
 
 
 def main():
+    from PIL import Image
     logging.basicConfig(
         level=logging.INFO,
         force=True,

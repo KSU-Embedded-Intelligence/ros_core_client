@@ -1,8 +1,11 @@
-from .communication_objects.relay_service_pb2 import CommandRequestMessage
-from .env import Ros1Environment
+from .ros1.communication_objects.relay_service_pb2 import CommandRequestMessage
+from .ros1.env import Ros1Environment
+from .ros2.proto.gateway_pb2 import GatewayEnvelope
+from .ros2.env import Ros2Environment
 
-# Optional: define __all__ to restrict what is imported with 'from my_package import *'
 __all__ = [
     'Ros1Environment',
-    'CommandRequestMessage'
+    'CommandRequestMessage',
+    'Ros2Environment',
+    'GatewayEnvelope',
 ]

@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package gateway;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+// ============================================================================
+// Gateway Relay — Unified Envelope Protocol
+// ============================================================================
+//
+// ONE envelope type across all three gRPC communication paradigms
+// (Unary, ClientStream, ServerStream).  All three interfaces compose
+// commands identically; only the transport characteristic differs
+// (discrete vs. continuous-in vs. continuous-out).
+//
+// Payload conventions per command:
+//
+//   CMD_START / CMD_STOP / CMD_RESET / CMD_CONFIGURE / CMD_PING
+//     All share the same payload format:
+//       { "<node_name>": {<params>} | {}, ... }
+//     Keys   = target node names.
+//     Values = {} when no parameters are needed,
+//              or a dict of {param_key: param_value, ...}.
+//     Each node is dispatched separately to the bridge module, which
+//     calls the corresponding start()/stop()/reset()/exchange() on
+//     the target node.
+//
+//     Examples:
+//       Start with no params:   {"/base_link": {}, "/lidar": {}}
+//       Start with params:      {"/lidar": {"mode": "high_res", "freq": 20}}
+//       Reset with reinit:      {"/arm": {"calibrate": true}}
+//       Configure:              {"/arm": {"max_vel": 2.0, "accel": 0.9}}
+//       Ping specific nodes:    {"/base_link": {}, "/arm": {}}
+//       Ping all (empty):       {}
+//
+//   CMD_EXCHANGE
+//     Payload carries a high-level command defined by the driver and
+//     registered in the command map.  Must include a "command" key whose
+//     value is a registered command name.  The relay resolves the target
+//     node, API entry, and message type from the command map.  Remaining
+//     payload keys are the command's data.
+//       {"command": "set_speed", "linear_x": 0.5, "angular_z": 0.1}
+//
+//   CMD_STATUS
+//     Request payload is empty.
+//     Response payload carries the command map and node registry.
+//     Handled entirely by the relay — no bridge dispatch.
+//
+// ============================================================================
+
+enum Command {
+    CMD_UNSPECIFIED = 0;
+    CMD_START       = 1;
+    CMD_STOP        = 2;
+    CMD_EXCHANGE    = 3;
+    CMD_RESET       = 4;
+    CMD_STATUS      = 5;
+    CMD_CONFIGURE   = 6;
+    CMD_PING        = 7;
+}
+
+enum Status {
+    STATUS_UNSPECIFIED = 0;
+    STATUS_OK          = 1;
+    STATUS_ERROR       = 2;
+    STATUS_PENDING     = 3;
+    STATUS_TIMEOUT     = 4;
+    STATUS_REJECTED    = 5;
+    STATUS_BUSY        = 6;
+}
+
+message GatewayEnvelope {
+    google.protobuf.Timestamp   time      = 1;
+    string                      version   = 2;
+    Status                      status    = 3;
+    string                      message   = 4;
+    Command                     command   = 5;
+    google.protobuf.Struct      payload   = 6;
+}
+
+// Three paradigms, same envelope, same processing pipeline.
+service GatewayService {
+    rpc Unary        (GatewayEnvelope)        returns (GatewayEnvelope);
+    rpc ClientStream (stream GatewayEnvelope) returns (GatewayEnvelope);
+    rpc ServerStream (GatewayEnvelope)        returns (stream GatewayEnvelope);
+}
