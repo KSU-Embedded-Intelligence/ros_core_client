@@ -17,7 +17,8 @@ license = { file = "LICENSE" }
 dependencies = [
     "grpcio",
     "numpy",
-    "protobuf"
+    "opencv-python>=4.13.0.92",
+    "protobuf",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
